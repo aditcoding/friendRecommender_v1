@@ -48,13 +48,13 @@ public class Driver {
     }
 
     private static void invokeRecommenders(Set<Person> persons) {
-        AgeHomeTownRecommender ageHomeTownRecommender = new AgeHomeTownRecommender();
+        IRecommender ageHomeTownRecommender = new AgeHomeTownRecommender();
         Map<Person, Set<Person>> recos1 = ageHomeTownRecommender.recommend(persons, MAX_RECOMMENDATIONS);
 
-        SchoolHomeTownRecommender schoolHomeTownRecommender =  new SchoolHomeTownRecommender();
+        IRecommender schoolHomeTownRecommender =  new SchoolHomeTownRecommender();
         Map<Person, Set<Person>> recos2 = schoolHomeTownRecommender.recommend(persons, MAX_RECOMMENDATIONS);
 
-        MutualFriendRecommender mutualFriendRecommender = new MutualFriendRecommender();
+        IRecommender mutualFriendRecommender = new MutualFriendRecommender();
         Map<Person, Set<Person>> recos3 = mutualFriendRecommender.recommend(persons, MAX_RECOMMENDATIONS);
 
         System.out.println("Age_HomeTown: ");
