@@ -5,6 +5,7 @@ import java.util.Set;
  */
 public class Person {
     public String id, name, age, hometown, school;
+    public double quantifier; //Generic
     private Set<String> friendIds;
     private Set<String> recommendedFriends;
 

@@ -82,10 +82,10 @@ public class Driver {
     }
 
     private static Set<String> parseFriendIds(String friendIds) {
-        friendIds = friendIds.substring(0, friendIds.length());
+        friendIds = friendIds.substring(0, friendIds.length()-1);
         String[] arr = friendIds.split(",");
         Set<String> set = new HashSet<>(arr.length);
-        for (String s : arr) set.add(s);
+        for (String s : arr) set.add(s.trim());
         return set;
     }
 }

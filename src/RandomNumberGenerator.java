@@ -23,8 +23,7 @@ public class RandomNumberGenerator {
             Set<Integer> friendIds = new HashSet<>(numFriends);
             for (int i = 0; i < numFriends; i++) {
                 int nextId = ThreadLocalRandom.current().nextInt(1, 51);
-                if (nextId != j)
-                    friendIds.add(nextId);
+                if (nextId != j) friendIds.add(nextId);
             }
             m.put(j, friendIds);
         }
