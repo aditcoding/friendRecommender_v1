@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="FriendRecommender:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/FriendRecommender_jar</output-path>
+    <root id="archive" name="FriendRecommender.jar">
+      <element id="module-output" name="FriendRecommender" />
+    </root>
+  </artifact>
+</component>

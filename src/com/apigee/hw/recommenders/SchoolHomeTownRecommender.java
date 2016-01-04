@@ -1,3 +1,7 @@
+package com.apigee.hw.recommenders;
+
+import com.apigee.hw.IRecommender;
+import com.apigee.hw.Person;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -6,39 +10,41 @@ import java.util.Set;
 /**
  * Created by adi on 12/30/15.
  */
-public class AgeHomeTownRecommender implements IRecommender {
+public class SchoolHomeTownRecommender implements IRecommender {
 
-    private Map<String, Set<Person>> ageInvIdx;
+    private Map<String, Set<Person>> schoolInvIdx;
     private Map<String, Set<Person>> hometownInvIdx;
 
     @Override
     public Map<Person, Set<Person>> recommend(Set<Person> input, int max) {
-        Map<Person, Set<Person>> m =new HashMap<>();
+        Map<Person, Set<Person>> m = new HashMap<>();
         createInvertedIndices(input);
         for (Person p : input) {
-            String age = p.age;
+            String school = p.school;
             String hometown = p.hometown;
-            Set<Person> sameAge = ageInvIdx.get(age); // can use +- age instead of exact
+            Set<Person> sameSchool = schoolInvIdx.get(school);
             Set<Person> sameHometown = hometownInvIdx.get(hometown);
-            sameAge.retainAll(sameHometown); // Intersection
-            m.put(p, sameAge);
+            Set<Person> intersection = new HashSet<>(sameSchool);
+            intersection.retainAll(sameHometown); // Intersection
+            intersection.remove(p); // duh
+            m.put(p, intersection);
         }
         return m;
     }
 
     private void createInvertedIndices(Set<Person> input) {
-        if (ageInvIdx == null) ageInvIdx = new HashMap<>();
+        if (schoolInvIdx == null) schoolInvIdx = new HashMap<>();
         if (hometownInvIdx == null) hometownInvIdx = new HashMap<>();
         for (Person p : input) {
             // Create school inv idx
-            String age = p.age;
-            if (ageInvIdx.containsKey(age)) {
-                Set<Person> persons = ageInvIdx.get(age);
+            String school = p.school;
+            if (schoolInvIdx.containsKey(school)) {
+                Set<Person> persons = schoolInvIdx.get(school);
                 persons.add(p);
             } else {
                 Set<Person> persons = new HashSet<>();
                 persons.add(p);
-                ageInvIdx.put(age, persons);
+                schoolInvIdx.put(school, persons);
             }
             // Create hometown inv idx
             String hometown = p.hometown;

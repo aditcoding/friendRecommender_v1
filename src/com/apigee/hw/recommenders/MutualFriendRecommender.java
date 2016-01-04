@@ -1,23 +1,21 @@
-import java.util.Comparator;
+package com.apigee.hw.recommenders;
+
+import com.apigee.hw.IRecommender;
+import com.apigee.hw.Person;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 /**
  * Created by adi on 12/30/15.
  */
 public class MutualFriendRecommender implements IRecommender {
-
-    class PersonQuantifierComparator implements Comparator<Person> {
-
-        @Override
-        public int compare(Person o1, Person o2) {
-            return Double.compare(o1.quantifier, o2.quantifier);
-        }
-    }
 
     public static final int MAX_RECOMMENDATIONS = 5;
 
@@ -27,16 +25,20 @@ public class MutualFriendRecommender implements IRecommender {
         //Putting all values in map
         Map<String, Person> m = new HashMap<>();
         for (Person p : input) m.put(p.id, p);
+        PriorityQueue<Person> pq = new PriorityQueue<>(MAX_RECOMMENDATIONS, new Person.PersonQuantifierComparator());
+        Set<String> secondDegree = new HashSet<>();
         for (Person p : input) {
-            PriorityQueue<Person> pq = new PriorityQueue<>(MAX_RECOMMENDATIONS, new PersonQuantifierComparator());
-            Set<String> secondDegree = p.getFriendIds();
-            Set<String> secondDegreeCopy = new HashSet<>();
-            for (String s : secondDegree) {
-                secondDegreeCopy.addAll(secondDegree);
-                int totalFriends = secondDegree.size() + m.get(s).getFriendIds().size();
-                secondDegreeCopy.retainAll(m.get(s).getFriendIds());
-                int numMutual = secondDegreeCopy.size();
-                double ratio = (double) numMutual / (totalFriends - numMutual);
+            pq.clear();
+            secondDegree.clear();
+            Set<String> fIds = p.getFriendIds();
+            for (String s : fIds) {
+                secondDegree.addAll(fIds); // shallow copy
+                int totalFriends = fIds.size() + m.get(s).getFriendIds().size() - 2; // -2 for excluding each other
+                secondDegree.retainAll(m.get(s).getFriendIds());
+                int numMutual = secondDegree.size();
+                double ratio;
+                if (totalFriends == numMutual) ratio = 1;
+                else ratio = (double) numMutual / (totalFriends - numMutual);
                 Person tmp = m.get(s);
                 tmp.quantifier = ratio;
                 if (pq.size() < 5) pq.add(tmp);
@@ -45,15 +47,17 @@ public class MutualFriendRecommender implements IRecommender {
                     pq.add(tmp);
                 }
             }
-            Set<Person> topFive = new HashSet<>(5);
+            SortedSet<Person> topFive = new TreeSet<>(Collections.reverseOrder(new Person.PersonQuantifierComparator()));
             outer:
             while (!pq.isEmpty()) {
                 Person p1 = pq.poll();
                 Iterator<String> iter = p1.getFriendIds().iterator();
                 while (iter.hasNext()) {
                     String next = iter.next();
-                    if (next.equals(p.id) || p.getFriendIds().contains(next)) continue;
-                    topFive.add(m.get(next));
+                    if (next.equals(p.id) || fIds.contains(next)) continue;
+                    Person tmp = m.get(next).clone(); // shallow clone
+                    tmp.quantifier = p1.quantifier;
+                    topFive.add(tmp);
                     if (topFive.size() == 5) break outer;
                 }
             }

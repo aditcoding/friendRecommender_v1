@@ -1,0 +1,6 @@
+1, a, 17, Madison, RaleighHigh, [4, 5, 3]
+2, b, 17, Madison, RaleighHigh, [3, 4]
+3, c, 14, Miami, SeattleHigh, [2, 4, 1, 6]
+4, d, 22, Berkeley, SeattleHigh, [1, 2, 3]
+5, e, 20, Orleans, AustinHigh, [1]
+6, f, 21, Orleans, AustinHigh, [3]

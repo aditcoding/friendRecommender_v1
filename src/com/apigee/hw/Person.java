@@ -1,13 +1,15 @@
+package com.apigee.hw;
+
+import java.util.Comparator;
 import java.util.Set;
 
 /**
  * Created by adi on 12/30/15.
  */
-public class Person {
+public class Person implements Cloneable {
     public String id, name, age, hometown, school;
     public double quantifier; //Generic
     private Set<String> friendIds;
-    private Set<String> recommendedFriends;
 
     public Person(String id, String name, String age, String hometown, String school) {
         this.id = id;
@@ -25,17 +27,9 @@ public class Person {
         friendIds = fIds;
     }
 
-    public Set<String> getRecommendedFriends() {
-        return recommendedFriends;
-    }
-
-    public void setRecommendedFriends(Set<String> recommendedFriends) {
-        this.recommendedFriends = recommendedFriends;
-    }
-
     @Override
     public String toString() {
-        return "[" + id + ", " + name + ", " + age + ", " + hometown + ", " + school + "]";
+        return "[" + id + ", " + name + ", " + age + ", " + hometown + ", " + school + ", " + quantifier + "]";
     }
 
     @Override
@@ -50,5 +44,24 @@ public class Person {
     @Override
     public int hashCode() {
         return Integer.parseInt(id);
+    }
+
+    public Person clone() {
+        try {
+            return (Person) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static class PersonQuantifierComparator implements Comparator<Person> {
+
+        @Override
+        public int compare(Person o1, Person o2) {
+            int comp = Double.compare(o1.quantifier, o2.quantifier);
+            if (comp == 0) return o1.id.compareTo(o2.id);
+            return comp;
+        }
     }
 }
