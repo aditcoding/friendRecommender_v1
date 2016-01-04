@@ -4,13 +4,13 @@
 
 <img src="diagram.png"> 
 
-Description: 
+<b> Description:  </b>
 The system contains a Recommender interface that all recommenders implement. Currently three different 
 recommenders are available : 
 
-● AgeHomeTownRecommender ­ recommends people with same age and hometown 
-● SchoolHomeTownRecommnder ­ recommends people with same school and hometown 
-● MutualFriendRecommender ­ recommends a randomly chosen friend from the friend lists of people with 
+● AgeHomeTownRecommender ­ recommends people with same age and hometown <br>
+● SchoolHomeTownRecommnder ­ recommends people with same school and hometown <br>
+● MutualFriendRecommender ­ recommends a randomly chosen friend from the friend lists of people with <br>
 whom the user shares highest number of mutual friends 
  
 Results from each of these recommenders is aggregated by the Aggregator. It assigns weights to the 
